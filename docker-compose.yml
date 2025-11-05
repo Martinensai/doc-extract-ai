@@ -1,0 +1,17 @@
+version: '3.8'
+services:
+  app:
+    build: .
+    volumes:
+      - .:/app
+    command: ["bash", "-c", "streamlit run src/chatbot/app.py --server.port 8501 --server.address 0.0.0.0"]
+    ports:
+      - "8501:8501"
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: admin
+      POSTGRES_PASSWORD: changeme
+      POSTGRES_DB: docuextract
+    ports:
+      - "5432:5432"

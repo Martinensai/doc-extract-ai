@@ -1,0 +1,15 @@
+# Minimal requirements (add versions as needed)
+pyyaml
+pymupdf
+spacy
+sentence-transformers
+langchain
+chromadb
+faiss-cpu
+psycopg2-binary
+sqlalchemy
+streamlit
+apache-airflow
+requests
+beautifulsoup4
+python-dotenv

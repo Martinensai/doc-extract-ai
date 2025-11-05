@@ -1,0 +1,18 @@
+# Minimal airflow docker compose example (adapt as needed)
+# This is a placeholder; use official Apache Airflow repo examples for production.
+version: '3'
+services:
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+  airflow:
+    image: apache/airflow:2.6.3
+    environment:
+      AIRFLOW__CORE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@postgres/airflow
+    volumes:
+      - ./dags:/opt/airflow/dags
+    ports:
+      - "8080:8080"
