@@ -1,0 +1,77 @@
+# ------------------------------------
+# 1. Dossiers de Données et Fichiers Bruts
+# (Selon l'architecture 'data/raw' mentionnée dans le projet)
+# ------------------------------------
+data/raw/
+data/processed/
+data/embeddings/ # Base vectorielle (FAISS ou ChromaDB) [cite: 16]
+
+# Ignorer tous les documents, images et archives
+*.pdf          # Documents PDF (fichiers bruts)
+*.doc
+*.docx
+*.xls
+*.xlsx
+*.csv
+*.json
+*.parquet
+*.zip
+
+# Images
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.bmp
+
+# ------------------------------------
+# 2. Environnement et Dépendances Python
+# ------------------------------------
+# Virtual Environments
+.venv/
+venv/
+env/
+__pycache__/
+*.pyc
+*.egg
+.mypy_cache/
+
+# Gestionnaires de paquets
+pip-log.txt
+pip-delete-this-arg-in-cli.log
+poetry.lock
+.env # Variables d'environnement
+
+# ------------------------------------
+# 3. Technologies Spécifiques au Projet
+# ------------------------------------
+# Logs
+*.log
+
+# Docker [cite: 37]
+# Ignorer le volume de données (Postgres / ChromaDB / Streamlit)
+docker-compose.yml
+!docker-compose.prod.yml # Si vous avez besoin de versionner une version de prod
+*.env # Fichiers de variables d'environnement pour Docker
+
+# PyMuPDF/spaCy/HuggingFace [cite: 32]
+# Modèles locaux (téléchargés)
+models/
+
+# Streamlit (si des fichiers de cache sont générés) [cite: 38]
+.streamlit/
+
+# ------------------------------------
+# 4. IDE et OS Files
+# ------------------------------------
+# macOS
+.DS_Store
+
+# Windows
+Thumbs.db
+
+# JetBrains/PyCharm
+.idea/
+
+# VS Code
+.vscode/
