@@ -1,8 +1,12 @@
-import fitz  # PyMuPDF
-from pathlib import Path
-import sys
 import os
 import time
+import sys
+
+import fitz  # PyMuPDF
+from pathlib import Path
+
+
+
 
 try:
     from PIL import Image
@@ -13,9 +17,6 @@ except ImportError:
     print("Erreur: Des bibliothèques requises sont manquantes.", file=sys.stderr)
     print("Veuillez installer : pip install pymupdf pillow pytesseract opencv-python-headless numpy", file=sys.stderr)
     sys.exit(1)
-
-# --- AIDE PRIVÉE : Logique OpenCV ---
-# (Cette fonction reste interne et est appelée par la Tâche 2)
 
 def _private_cv_find_signatures(img_cv, original_img, page_num):
     """
@@ -195,16 +196,24 @@ def extract_signatures_cv(type_doc: str, numero: str):
     print(f"--- TÂCHE 2 Terminée en {time.time() - start_time:.2f} secondes ---")
     return True
 
+
 # --- Point d'entrée principal (Exemple d'utilisation) ---
 
 if __name__ == "__main__":
-    
     # Exemple de test avec votre document
     type_doc_exemple = "decret"
-    numero_exemple = "2025-652"
+    numero_exemple = "2024-1051"
     
     print("="*50)
     print("DÉBUT DU TRAITEMENT MODULAIRE")
+    print("="*50)
+     # --- Méthode 1 (Recommandée) ---
+    extract_tables_img2table(type_doc_exemple, numero_exemple)
+    
+
+
+    print("\n" + "="*50)
+    print("TRAITEMENT TERMINÉ")
     print("="*50)
 
     # Vérification si Tesseract est accessible
@@ -225,7 +234,5 @@ if __name__ == "__main__":
     success_signatures = extract_signatures_cv(type_doc_exemple, numero_exemple)
     if not success_signatures:
         print("Échec de l'extraction de signatures.")
-
-    print("\n" + "="*50)
-    print("TRAITEMENT TERMINÉ")
-    print("="*50)
+    
+   
