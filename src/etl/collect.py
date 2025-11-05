@@ -69,7 +69,7 @@ def telecharger_document_benin(numero: str, type_doc: DocumentType) -> str:
 # --- Exemple d'utilisation ---
 if __name__ == "__main__":
         # 1. Télécharger un décret (ex: décret numéro 123)
-    chemin_decret = telecharger_document_benin(numero='2022-338', type_doc="decision")
+    chemin_decret = telecharger_document_benin(numero='2024-1051', type_doc="decret")
     print("-" * 30)
 
 

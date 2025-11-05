@@ -1,6 +1,5 @@
 # ------------------------------------
 # 1. Dossiers de Données et Fichiers Bruts
-# (Selon l'architecture 'data/raw' mentionnée dans le projet)
 # ------------------------------------
 data/raw/
 data/processed/
@@ -51,7 +50,7 @@ poetry.lock
 # Docker [cite: 37]
 # Ignorer le volume de données (Postgres / ChromaDB / Streamlit)
 docker-compose.yml
-!docker-compose.prod.yml # Si vous avez besoin de versionner une version de prod
+!docker-compose.prod.yml 
 *.env # Fichiers de variables d'environnement pour Docker
 
 # PyMuPDF/spaCy/HuggingFace [cite: 32]
@@ -68,7 +67,7 @@ models/
 .DS_Store
 
 # Windows
-Thumbs.db
+Thumbs.db   
 
 # JetBrains/PyCharm
 .idea/
