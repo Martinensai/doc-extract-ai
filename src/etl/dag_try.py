@@ -2,16 +2,13 @@ import sys
 import logging
 from typing import Literal
 
-# --- 1. Importations des Fonctions ETL ---
-# NOTE: Ces imports nécessitent que le dossier 'src' soit configuré dans votre PYTHONPATH
-# ou que vous utilisiez la structure d'importation relative corrigée (non recommandée ici).
-
-# Exemple d'imports basé sur la structure du DAG et les noms de fonctions
-# Vous devrez peut-être ajuster ces chemins d'accès
-from .collect import telecharger_document_benin 
-from .extract import extract_layout_aware_text_ocr # Nom supposé pour l'extraction de texte
-from .transform import transform_text_to_json
-from .load import load_single_document
+# --- 1. Importations des Fonctions ETL et DB ---
+# Nécessite que le dossier 'src' soit le paquet racine (exécuté via python3 -m src.etl.dag_try)
+from src.etl.collect import telecharger_document_benin 
+from src.etl.extract import extract_layout_aware_text_ocr
+from src.etl.transform import transform_text_to_json
+from src.etl.load import load_single_document
+from src.db.utils import initialize_db, get_db_engine # Ajout de l'initialisation DB
 
 # --- Configuration ---
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
@@ -20,25 +17,37 @@ logger = logging.getLogger(__name__)
 # Définition des types de documents valides (pour type hinting)
 DocumentType = Literal["decrets", "loi", "ordonnance", "arrete", "accords", "decision"]
 
+def setup_database() -> bool:
+    """Initialise la base de données (crée/vérifie les tables)."""
+    logger.info("Étape 0/5: Initialisation de la base de données...")
+    try:
+        # Tente d'obtenir le moteur de DB (lit le .env)
+        engine = get_db_engine()
+        # Initialise les tables (exécute schema.sql, créant la table 'decrets')
+        initialize_db(engine)
+        logger.info("Initialisation de la DB réussie.")
+        return True
+    except Exception as e:
+        logger.error(f"Échec de l'initialisation de la DB: {e}", exc_info=False)
+        return False
 
 def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
     """
-    Lance séquentiellement les quatre fonctions du pipeline ETL pour un document donné.
-    
-    Args:
-        type_doc (DocumentType): Le type de document (ex: 'decrets').
-        numero_doc (str): Le numéro complet du document (ex: '2025-652').
-
-    Returns:
-        bool: True si toutes les étapes réussissent, False sinon.
+    Lance séquentiellement les cinq étapes du pipeline ETL pour un document donné.
     """
     logger.info(f"*** Démarrage du Pipeline ETL pour : {type_doc}/{numero_doc} ***")
     
     # ------------------------------------
+    # TÂCHE 0 : SETUP DB (Prépare le terrain)
+    # ------------------------------------
+    if not setup_database():
+        logger.error("Le setup de la DB a échoué. Arrêt du pipeline.")
+        return False
+
+    # ------------------------------------
     # TÂCHE 1 : COLLECTE (C)
     # ------------------------------------
-    logger.info("Étape 1/4: Collecte du PDF...")
-    # telecharger_document_benin retourne le chemin du fichier ou None (si échec)
+    logger.info("Étape 1/5: Collecte du PDF...")
     pdf_path = telecharger_document_benin(numero=numero_doc, type_doc=type_doc)
     
     if not pdf_path:
@@ -50,8 +59,7 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
     # ------------------------------------
     # TÂCHE 2 : EXTRACTION (E)
     # ------------------------------------
-    logger.info("Étape 2/4: Extraction du texte brut (OCR/PyMuPDF)...")
-    # extract_layout_aware_text_ocr doit retourner True ou False
+    logger.info("Étape 2/5: Extraction du texte brut (OCR/PyMuPDF)...")
     extraction_success = extract_layout_aware_text_ocr(type_doc=type_doc, numero=numero_doc)
     
     if not extraction_success:
@@ -63,8 +71,7 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
     # ------------------------------------
     # TÂCHE 3 : TRANSFORMATION (T)
     # ------------------------------------
-    logger.info("Étape 3/4: Transformation en JSON structuré (IA Gemini)...")
-    # transform_text_to_json doit retourner True ou False
+    logger.info("Étape 3/5: Transformation en JSON structuré (IA Gemini)...")
     transform_success = transform_text_to_json(type_doc=type_doc, numero=numero_doc)
     
     if not transform_success:
@@ -76,8 +83,7 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
     # ------------------------------------
     # TÂCHE 4 : CHARGEMENT (L)
     # ------------------------------------
-    logger.info("Étape 4/4: Chargement dans PostgreSQL...")
-    # load_single_document doit retourner True ou False
+    logger.info("Étape 4/5: Chargement dans PostgreSQL...")
     load_success = load_single_document(type_doc=type_doc, numero_doc=numero_doc)
     
     if not load_success:
@@ -91,10 +97,11 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
 
 # --- Exécution du Pipeline de Test ---
 if __name__ == "__main__":
-    # Utilisez le décret que nous avons chargé manuellement pour le test L
     TYPE_TEST = "decret"
     NUMERO_TEST = "2025-652"
     
+    logger.warning("NOTE: Assurez-vous d'avoir effacé les tables DB avant de relancer un test propre si le chargement a déjà réussi (pour éviter les doublons).")
+
     if run_local_pipeline(type_doc=TYPE_TEST, numero_doc=NUMERO_TEST):
         sys.exit(0) # Sortie succès
     else:
