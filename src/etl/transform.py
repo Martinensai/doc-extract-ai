@@ -3,8 +3,16 @@ import os
 import json
 from pathlib import Path
 
+from dotenv import load_dotenv
+
+# --- Configuration ---
+load_dotenv()
+
+
+API_KEY = os.getenv("api_key")
+
 # Configurez votre clé API
-genai.configure(api_key="AIzaSyC")
+genai.configure(api_key=API_KEY)
 
 model = genai.GenerativeModel('gemini-2.5-flash')
 
