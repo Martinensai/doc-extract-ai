@@ -15,7 +15,7 @@ data/embeddings/ # Base vectorielle (FAISS ou ChromaDB) [cite: 16]
 *.parquet
 *.zip
 *.json
-
+*.env
 # Images
 *.jpg
 *.jpeg
