@@ -9,11 +9,11 @@ from dotenv import load_dotenv
 
 # --- Configuration (A exécuter une seule fois au chargement du module) ---
 load_dotenv()
-API_KEY = os.getenv("api_key")
+API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Vérification de la clé API
 if not API_KEY:
-    print("Erreur: Clé API 'api_key' non trouvée dans .env", file=sys.stderr)
+    print("Erreur: Clé API 'GEMINI_API_KEY' non trouvée dans .env", file=sys.stderr)
     # Vous pourriez vouloir arrêter le script ici avec sys.exit(1)
     # ou laisser la fonction échouer si elle est appelée.
     
