@@ -12,7 +12,6 @@ data/embeddings/ # Base vectorielle (FAISS ou ChromaDB) [cite: 16]
 *.xls
 *.xlsx
 *.csv
-*.json
 *.parquet
 *.zip
 
