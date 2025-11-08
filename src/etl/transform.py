@@ -38,13 +38,12 @@ JSON_SCHEMA_DECRET = """
   "date_de_publication": "...",
   "ministère_concerné": "...",
   "objet": "...",
-  "articles": {
-      "article_1": "...",
-      "article_2": "...",
-      "article_3": "...",
-      "article_4": "...",
-      "article_5": "..."
-  },
+  "articles": [
+    {
+      "numero": "Numéro de l'article (ex: Article 1, Article 2, Article 3-bis)",
+      "texte": "Contenu textuel complet de cet article spécifique."
+    }
+  ],
   "signataires": [
       { "nom": "...", "fonction": "..." }
   ]
