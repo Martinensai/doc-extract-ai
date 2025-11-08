@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS decrets (
     checksum VARCHAR(64) UNIQUE,
     chemin_fichier_local VARCHAR(500) NOT NULL UNIQUE
 );
-CREATE INDEX idx_decrets_numero ON decrets (numero_complet);
+CREATE INDEX IF NOT EXISTS idx_decrets_numero ON decrets (numero_complet);
 
 -- Table 2/3: decret_articles (Contenu textuel détaillé)
 CREATE TABLE IF NOT EXISTS decret_articles (
@@ -26,7 +26,7 @@ CREATE TABLE IF NOT EXISTS decret_articles (
         REFERENCES decrets (id_decret)
         ON DELETE CASCADE
 );
-CREATE INDEX idx_articles_decret_id ON decret_articles (id_decret);
+CREATE INDEX IF NOT EXISTS idx_articles_decret_id ON decret_articles (id_decret);
 
 -- Table 3/3: decret_signataires (Signataires et leurs fonctions)
 CREATE TABLE IF NOT EXISTS decret_signataires (
@@ -40,4 +40,4 @@ CREATE TABLE IF NOT EXISTS decret_signataires (
         REFERENCES decrets (id_decret)
         ON DELETE CASCADE
 );
-CREATE INDEX idx_signataires_decret_id ON decret_signataires (id_decret);
+CREATE INDEX IF NOT EXISTS idx_signataires_decret_id ON decret_signataires (id_decret);
