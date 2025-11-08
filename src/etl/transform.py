@@ -9,7 +9,7 @@ from dotenv import load_dotenv
 
 # --- Configuration (A exécuter une seule fois au chargement du module) ---
 load_dotenv()
-API_KEY = os.getenv("api_key")
+API_KEY = os.getenv("GEMINI_API_KEY")
 
 # Vérification de la clé API
 if not API_KEY:
