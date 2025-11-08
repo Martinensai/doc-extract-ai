@@ -1,6 +1,6 @@
 {
     "numéro_du_décret": "2025-652",
-    "date_de_publication": "22 octobre 2025",
+    "date_de_publication": "22 OCTOBRE 2025",
     "ministère_concerné": "Ministère du Cadre de Vie et des Transports, en charge du Développement durable",
     "objet": "nomination des membres du Conseil d'administration du Centre national de Sécurité routière",
     "articles": [
@@ -32,11 +32,15 @@
         },
         {
             "nom": "Romuald WADAGNI",
+<<<<<<< HEAD
             "fonction": "Le Ministre de l'Économie et des Finances, Ministre d'Etat"
         },
         {
             "nom": "",
             "fonction": "Le Ministre du Cadre de Vie et des Transports, chargé du Développement durable"
+=======
+            "fonction": "Le Ministre de l'Économie et des Finances, Ministre d'État"
+>>>>>>> b63757b (requirements.txt)
         }
     ]
 }
