@@ -23,6 +23,8 @@ data/embeddings/ # Base vectorielle (FAISS ou ChromaDB) [cite: 16]
 *.gif
 *.bmp
 
+*.txt          # Fichiers texte bruts
+
 # ------------------------------------
 # 2. Environnement et Dépendances Python
 # ------------------------------------
