@@ -33,12 +33,9 @@ def initialize_db(engine: Engine):
     try:
         with open(SCHEMA_FILE_PATH, 'r') as f:
             sql_script = f.read()
-        
-        with engine.connect() as connection:
-            # Exécute tout le script SQL
+        with engine.begin() as connection:
             connection.execute(text(sql_script))
-            connection.commit()
-        
+
         logger.info("✅ Schéma de la base de données créé/vérifié avec succès.")
 
     except FileNotFoundError:
@@ -68,4 +65,4 @@ if __name__ == '__main__':
         initialize_db(engine)
     except Exception:
         print("\n\nATTENTION : L'initialisation a échoué. Assurez-vous que le service 'db' est démarré :")
-        print("   $ docker compose up -d")
+        print("$ docker compose up -d")
