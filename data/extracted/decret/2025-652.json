@@ -1,12 +1,12 @@
 {
-    "numéro_du_décret": "2025-652",
+    "numéro_du_décret": "2025 - 652",
     "date_de_publication": "22 octobre 2025",
     "ministère_concerné": "Ministère du Cadre de Vie et des Transports, en charge du Développement durable",
-    "objet": "nomination des membres du Conseil d'administration du Centre national de Sécurité routière",
+    "objet": "portant nomination des membres du Conseil d'administration du Centre national de Sécurité routière.",
     "articles": [
         {
             "numero": "Article premier",
-            "texte": "Sont nommées membres du Conseil d'administration du Centre national de Sécurité routière, les personnes dont les noms suivent : -__ monsieur Roch Célestin HOUNDIJE, représentant du Ministère du Cadre de Vie et des Transports, en charge du Développement durable ; -_ monsieur Martin Agonman ALOUKOU, représentant du Ministère de l'Intérieur et de la Sécurité publique ; -_ monsieur Rodéric Maximin TOUDONOU, représentant de la Présidence de la République ; -_ monsieur Krishna LOKOSSOU, représentant du Ministère de l'Économie et des Finances ; -_ monsieur Jean-Pierre WANGBE, représentant du Ministère de la Santé."
+            "texte": "Sont nommées membres du Conseil d'administration du Centre national de Sécurité routière, les personnes dont les noms suivent :\n-__ monsieur Roch Célestin HOUNDIJE, représentant du Ministère du Cadre de Vie et des Transports, en charge du Développement durable ;\n-_ monsieur Martin Agonman ALOUKOU, représentant du Ministère de l'Intérieur et de la Sécurité publique ;\n-_ monsieur Rodéric Maximin TOUDONOU, représentant de la Présidence de la République ;\n-_ monsieur Krishna LOKOSSOU, représentant du Ministère de l'Économie et des Finances ;\n-_ monsieur Jean-Pierre WANGBE, représentant du Ministère de la Santé."
         },
         {
             "numero": "Article 2",
@@ -27,12 +27,16 @@
     ],
     "signataires": [
         {
-            "nom": "Patrice TALON",
+            "nom": "Patrice TAL",
             "fonction": "Président de la République, Chef de l'État, Chef du Gouvernement"
         },
         {
-            "nom": "Romuald WADAGNI",
-            "fonction": "Ministre de l'Économie et des Finances, Ministre d'État"
+            "nom": "Romuald WADAGN",
+            "fonction": "Ministre de l'Économie et des Finances"
+        },
+        {
+            "nom": "Nom non identifié",
+            "fonction": "Ministre d'État en charge du Cadre de Vie et des Transports, du Développement durable"
         }
     ]
 }
