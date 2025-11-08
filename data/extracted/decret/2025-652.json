@@ -2,11 +2,11 @@
     "numéro_du_décret": "2025-652",
     "date_de_publication": "22 octobre 2025",
     "ministère_concerné": "Ministère du Cadre de Vie et des Transports, en charge du Développement durable",
-    "objet": "portant nomination des membres du Conseil d'administration du Centre national de Sécurité routière.",
+    "objet": "nomination des membres du Conseil d'administration du Centre national de Sécurité routière",
     "articles": [
         {
             "numero": "Article premier",
-            "texte": "Sont nommées membres du Conseil d'administration du Centre national de Sécurité routière, les personnes dont les noms suivent : - monsieur Roch Célestin HOUNDIJE, représentant du Ministère du Cadre de Vie et des Transports, en charge du Développement durable ; - monsieur Martin Agonman ALOUKOU, représentant du Ministère de l'Intérieur et de la Sécurité publique ; - monsieur Rodéric Maximin TOUDONOU, représentant de la Présidence de la République ; - monsieur Krishna LOKOSSOU, représentant du Ministère de l'Économie et des Finances ; - monsieur Jean-Pierre WANGBE, représentant du Ministère de la Santé."
+            "texte": "Sont nommées membres du Conseil d'administration du Centre national de Sécurité routière, les personnes dont les noms suivent : -__ monsieur Roch Célestin HOUNDIJE, représentant du Ministère du Cadre de Vie et des Transports, en charge du Développement durable ; -_ monsieur Martin Agonman ALOUKOU, représentant du Ministère de l'Intérieur et de la Sécurité publique ; -_ monsieur Rodéric Maximin TOUDONOU, représentant de la Présidence de la République ; -_ monsieur Krishna LOKOSSOU, représentant du Ministère de l'Économie et des Finances ; -_ monsieur Jean-Pierre WANGBE, représentant du Ministère de la Santé."
         },
         {
             "numero": "Article 2",
@@ -32,7 +32,7 @@
         },
         {
             "nom": "Romuald WADAGNI",
-            "fonction": "Ministre d'Etat, Ministre de l'Économie et des Finances"
+            "fonction": "Ministre de l'Économie et des Finances, Ministre d'État"
         }
     ]
 }

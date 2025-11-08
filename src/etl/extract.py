@@ -498,7 +498,7 @@ if __name__ == "__main__":
     except Exception as e:
         print(f"ERREUR FATALE TÂCHE 1: {e}", file=sys.stderr)
 
-
+"""
     # TÂCHE 2 : PDF -> Images (Signatures)
     success_t2 = False
     try:
@@ -521,7 +521,6 @@ if __name__ == "__main__":
     print(f"Tâche 2 (Signatures): {'Succès' if success_t2 else 'Échec'}")
     print(f"Tâche 3 (JSON): {'Succès' if success_t3 else 'Échec'}")
 
-    """
     # Exemple de test avec votre document
     type_doc_exemple = "decret"
     numero_exemple = "2024-1051"
