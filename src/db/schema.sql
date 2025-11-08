@@ -32,7 +32,7 @@ CREATE INDEX IF NOT EXISTS idx_articles_decret_id ON decret_articles (id_decret)
 CREATE TABLE IF NOT EXISTS decret_signataires (
     id_signature SERIAL PRIMARY KEY,
     id_decret INT NOT NULL,
-    nom_signataire VARCHAR(150) NOT NULL,
+    nom_signataire VARCHAR(150) NULL,
     fonction_signataire VARCHAR(255) NOT NULL,
     UNIQUE (id_decret, nom_signataire),
     CONSTRAINT fk_decret_sign
