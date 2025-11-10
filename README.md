@@ -39,3 +39,79 @@ flowchart TD
     C --> D[(🗃️ PostgreSQL - Données structurées)]
     D --> E[🧮 ChromaDB / FAISS - Index vectoriel]
     E --> F[🤖 Chatbot LangChain + Streamlit]
+
+## 🚀 Installation
+
+1. Cloner le dépôt :
+```bash
+git clone https://github.com/Martinensai/doc-extract-ai.git
+cd doc-extract-ai
+```
+
+2. Créer et activer un environnement virtuel :
+```bash
+python -m venv venv
+source venv/bin/activate  # Linux/Mac
+```
+
+3. Installer les dépendances :
+```bash
+pip install -r requirements.txt
+```
+
+## 🗄️ Configuration de PostgreSQL
+
+1. Installation de PostgreSQL :
+```bash
+sudo apt update
+sudo apt install postgresql postgresql-contrib
+```
+
+2. Démarrer le service PostgreSQL :
+```bash
+sudo systemctl start postgresql
+sudo systemctl enable postgresql
+```
+
+3. Se connecter à PostgreSQL et créer une base de données :
+```bash
+sudo -u postgres psql
+```
+
+Dans l'invite PostgreSQL :
+```sql
+CREATE DATABASE docuextract;
+CREATE USER docuextract_user WITH PASSWORD 'votre_mot_de_passe';
+GRANT ALL PRIVILEGES ON DATABASE docuextract TO docuextract_user;
+\c docuextract
+```
+
+4. Initialiser la base de données avec le schéma :
+```bash
+psql -U docuextract_user -d docuextract -f src/db/schema.sql
+```
+
+Pour supprimer les tables si nécessaire :
+```sql
+DROP TABLE IF EXISTS decret_signataires CASCADE;
+DROP TABLE IF EXISTS decret_articles CASCADE;
+DROP TABLE IF EXISTS decrets CASCADE;
+```
+
+## 🚀 Lancement de l'application
+
+1. Lancer l'API FastAPI (dans un terminal) :
+```bash
+cd src/api
+uvicorn src.api.main:app --host 0.0.0.0 --port 8000
+```
+
+L'API sera accessible à l'adresse : http://localhost:8000
+
+2. Lancer l'interface Streamlit (dans un autre terminal) :
+```bash
+cd src/chatbot
+streamlit run app.py
+```
+
+L'interface sera accessible à l'adresse : http://localhost:8501

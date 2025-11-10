@@ -1,29 +1,38 @@
+"""
+Ce script sert de point d'entrée pour exécuter le pipeline ETL complet
+localement (sans Airflow) pour un seul document.
+
+Il orchestre séquentiellement les étapes suivantes :
+0. Setup DB: Initialise la connexion et les tables de la base de données.
+1. Collecte: Télécharge le fichier PDF source.
+2. Extraction: Applique l'OCR sur le PDF pour obtenir un fichier texte.
+3. Transformation: Utilise l'IA pour convertir le texte en JSON structuré.
+4. Chargement: Insère le JSON structuré dans la base de données PostgreSQL.
+
+Ce script est conçu pour être exécuté directement (ex: python3 -m src.etl.dag_try)
+à des fins de test ou de débogage du pipeline complet.
+"""
+
 import sys
 import logging
 from typing import Literal
 
-# --- 1. Importations des Fonctions ETL et DB ---
-# Nécessite que le dossier 'src' soit le paquet racine (exécuté via python3 -m src.etl.dag_try)
 from src.etl.collect import telecharger_document_benin 
 from src.etl.extract import extract_layout_aware_text_ocr
 from src.etl.transform import transform_text_to_json
 from src.etl.load import load_single_document
-from src.db.utils import initialize_db, get_db_engine # Ajout de l'initialisation DB
+from src.db.utils import initialize_db, get_db_engine
 
-# --- Configuration ---
 logging.basicConfig(level=logging.INFO, format='%(levelname)s: %(message)s')
 logger = logging.getLogger(__name__)
 
-# Définition des types de documents valides (pour type hinting)
 DocumentType = Literal["decrets", "loi", "ordonnance", "arrete", "accords", "decision"]
 
 def setup_database() -> bool:
     """Initialise la base de données (crée/vérifie les tables)."""
     logger.info("Étape 0/5: Initialisation de la base de données...")
     try:
-        # Tente d'obtenir le moteur de DB (lit le .env)
         engine = get_db_engine()
-        # Initialise les tables (exécute schema.sql, créant la table 'decrets')
         initialize_db(engine)
         logger.info("Initialisation de la DB réussie.")
         return True
@@ -37,16 +46,10 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
     """
     logger.info(f"*** Démarrage du Pipeline ETL pour : {type_doc}/{numero_doc} ***")
     
-    # ------------------------------------
-    # TÂCHE 0 : SETUP DB (Prépare le terrain)
-    # ------------------------------------
     if not setup_database():
         logger.error("Le setup de la DB a échoué. Arrêt du pipeline.")
         return False
 
-    # ------------------------------------
-    # TÂCHE 1 : COLLECTE (C)
-    # ------------------------------------
     logger.info("Étape 1/5: Collecte du PDF...")
     pdf_path = telecharger_document_benin(numero=numero_doc, type_doc=type_doc)
     
@@ -56,9 +59,6 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
         
     logger.info(f"Collecte réussie. Fichier: {pdf_path}")
     
-    # ------------------------------------
-    # TÂCHE 2 : EXTRACTION (E)
-    # ------------------------------------
     logger.info("Étape 2/5: Extraction du texte brut (OCR/PyMuPDF)...")
     extraction_success = extract_layout_aware_text_ocr(type_doc=type_doc, numero=numero_doc)
     
@@ -68,9 +68,6 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
         
     logger.info("Extraction de texte réussie.")
 
-    # ------------------------------------
-    # TÂCHE 3 : TRANSFORMATION (T)
-    # ------------------------------------
     logger.info("Étape 3/5: Transformation en JSON structuré (IA Gemini)...")
     transform_success = transform_text_to_json(type_doc=type_doc, numero=numero_doc)
     
@@ -80,9 +77,6 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
         
     logger.info("Transformation JSON réussie.")
 
-    # ------------------------------------
-    # TÂCHE 4 : CHARGEMENT (L)
-    # ------------------------------------
     logger.info("Étape 4/5: Chargement dans PostgreSQL...")
     load_success = load_single_document(type_doc=type_doc, numero_doc=numero_doc)
     
@@ -95,7 +89,6 @@ def run_local_pipeline(type_doc: DocumentType, numero_doc: str) -> bool:
     return True
 
 
-# --- Exécution du Pipeline de Test ---
 if __name__ == "__main__":
     TYPE_TEST = "decret"
     NUMERO_TEST = "2025-652"
@@ -103,6 +96,6 @@ if __name__ == "__main__":
     logger.warning("NOTE: Assurez-vous d'avoir effacé les tables DB avant de relancer un test propre si le chargement a déjà réussi (pour éviter les doublons).")
 
     if run_local_pipeline(type_doc=TYPE_TEST, numero_doc=NUMERO_TEST):
-        sys.exit(0) # Sortie succès
+        sys.exit(0)
     else:
-        sys.exit(1) # Sortie échec
+        sys.exit(1)

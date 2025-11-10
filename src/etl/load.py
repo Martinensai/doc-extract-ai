@@ -1,3 +1,18 @@
+"""
+Ce script gère le chargement des données structurées (JSON)
+dans la base de données (ex: PostgreSQL).
+
+Il prend les fichiers JSON générés par l'étape d'extraction (Tâche 3)
+et les utilise pour créer les enregistrements correspondants dans les
+tables de la base de données (Decret, DecretArticle, DecretSignataire).
+
+Fonctions principales :
+- format_date: Convertit les dates textuelles françaises en objets date.
+- load_single_document: Charge un document JSON unique dans la BDD,
+                        avec une logique d'auto-nettoyage pour les
+                        conflits d'unicité.
+"""
+
 import locale
 from typing import Optional, Dict, Any, List
 import os
@@ -9,13 +24,11 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.orm import Session
 from typing import Dict, Any, List
 
-# --- Configuration des imports ---
 import sys
 from pathlib import Path
 ROOT_DIR = Path(__file__).resolve().parents[2]
 if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
-# --- Fin Configuration des imports ---
 
 try:
     from src.db.models  import Decret, DecretArticle, DecretSignataire
@@ -24,12 +37,9 @@ except ImportError:
     from ..db.models  import Decret, DecretArticle, DecretSignataire
     from ..db.utils import get_db_session
 
-
-# Configuration
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Définition du chemin de base des données structurées
 BASE_STRUCTURED_PATH = Path("data/extracted")
 
 def format_date(date_str: str) -> Optional[datetime.date]:
@@ -75,13 +85,11 @@ def load_single_document(type_doc: str, numero_doc: str) -> bool:
     
     for session in get_db_session():
         try:
-            # 1. Vérification par 'numero_complet' (Cas normal)
             existing_decret = session.query(Decret).filter_by(numero_complet=numero_doc).first()
             if existing_decret:
                 logger.warning(f"Décret {numero_doc} existe déjà (par numéro). Insertion annulée.")
                 return True
             
-            # 2. Vérification "auto-nettoyante" par 'chemin_fichier_local' (Cas du bug)
             chemin_pdf = str(Path("data/raw") / type_doc / f"{numero_doc}.pdf")
             ghost_entry = session.query(Decret).filter_by(chemin_fichier_local=chemin_pdf).first()
             
@@ -89,9 +97,8 @@ def load_single_document(type_doc: str, numero_doc: str) -> bool:
                 logger.warning(f"Conflit de chemin détecté pour {chemin_pdf}.")
                 logger.warning(f"Suppression de l'entrée 'fantôme' (ID: {ghost_entry.id_decret}, Num: {ghost_entry.numero_complet}).")
                 session.delete(ghost_entry)
-                session.commit() # Commit de la suppression
+                session.commit()
             
-            # --- 3. Insertion (la voie est libre) ---
             date_str = json_data.get("date_de_publication", "")
             date_obj = format_date(date_str)
             
@@ -100,12 +107,12 @@ def load_single_document(type_doc: str, numero_doc: str) -> bool:
                 return False
 
             nouveau_decret = Decret(
-                numero_complet=numero_doc, # Utilise le numéro correct
+                numero_complet=numero_doc,
                 type_document=type_doc,
                 date_publication=date_obj,
                 ministere_concerne=json_data.get("ministère_concerné"),
                 objet=json_data.get("objet"),
-                chemin_fichier_local=chemin_pdf # Utilise le chemin construit
+                chemin_fichier_local=chemin_pdf
             )
             
             articles: List[Dict] = json_data.get("articles", [])
@@ -140,7 +147,6 @@ def load_single_document(type_doc: str, numero_doc: str) -> bool:
             logger.error(f"❌ Erreur lors de l'insertion du document: {e}")
             return False
 
-# ... (le if __name__ == "__main__" reste inchangé) ...
 if __name__ == "__main__":
     TYPE_TEST = "decret"
     NUMERO_TEST = "2025-652"

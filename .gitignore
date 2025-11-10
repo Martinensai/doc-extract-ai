@@ -3,7 +3,7 @@
 # ------------------------------------
 data/raw/
 data/processed/
-data/embeddings/ # Base vectorielle (FAISS ou ChromaDB) [cite: 16]
+data/embeddings/ # Base vectorielle (FAISS ou ChromaDB)
 
 # Ignorer tous les documents, images et archives
 *.pdf          # Documents PDF (fichiers bruts)
@@ -22,8 +22,7 @@ data/embeddings/ # Base vectorielle (FAISS ou ChromaDB) [cite: 16]
 *.png
 *.gif
 *.bmp
-
-*.txt          # Fichiers texte bruts
+*.txt     
 
 # ------------------------------------
 # 2. Environnement et Dépendances Python
@@ -55,11 +54,11 @@ docker-compose.yml
 !docker-compose.prod.yml 
 *.env # Fichiers de variables d'environnement pour Docker
 
-# PyMuPDF/spaCy/HuggingFace [cite: 32]
+# PyMuPDF/spaCy/HuggingFace 
 # Modèles locaux (téléchargés)
 models/
 
-# Streamlit (si des fichiers de cache sont générés) [cite: 38]
+# Streamlit
 .streamlit/
 
 # ------------------------------------
