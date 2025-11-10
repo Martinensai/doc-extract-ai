@@ -1,13 +1,22 @@
+"""
+Ce script définit le backend de l'application (FastAPI).
+
+Il expose un endpoint principal (`/run-etl`) qui permet à l'interface
+utilisateur (Streamlit) de déclencher le pipeline ETL complet de manière
+synchrone.
+
+L'API attend que le pipeline (run_local_pipeline) soit terminé avant
+de renvoyer une réponse (succès ou échec) au frontend.
+"""
+
 import sys
 from pathlib import Path
 from fastapi import FastAPI, HTTPException
 import logging
 
-# --- Configuration des imports ---
 ROOT_DIR = Path(__file__).resolve().parents[2]
 if str(ROOT_DIR) not in sys.path:
     sys.path.append(str(ROOT_DIR))
-# --- Fin Configuration des imports ---
 
 try:
     from src.etl.dag_try import run_local_pipeline
@@ -17,7 +26,6 @@ except ImportError as e:
         logging.error(f"ERREUR: run_local_pipeline n'a pas pu être importé.")
         return False
 
-# Initialisation
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 app = FastAPI(
@@ -36,21 +44,16 @@ async def trigger_etl_synchronous(type_doc: str, numero_doc: str):
     logger.info(f"[FastAPI] Tâche ETL SYNCHRONE démarrée pour: {type_doc}/{numero_doc}")
     
     try:
-        # --- MODIFICATION ---
-        # Plus de 'background_tasks'. On appelle directement la fonction
-        # et on attend qu'elle se termine.
         success = run_local_pipeline(type_doc, numero_doc)
         
         if success:
             logger.info(f"[FastAPI] Tâche ETL SYNCHRONE RÉUSSIE pour: {type_doc}/{numero_doc}")
-            # L'API répond 200 OK (implicite)
             return {
                 "status": "success", 
                 "message": f"ETL complété pour {type_doc}/{numero_doc}."
             }
         else:
             logger.error(f"[FastAPI] Tâche ETL SYNCHRONE ÉCHOUÉE pour: {type_doc}/{numero_doc}")
-            # Si l'ETL échoue, on renvoie une erreur au frontend
             raise HTTPException(status_code=500, detail="Le pipeline ETL a échoué.")
             
     except Exception as e:
